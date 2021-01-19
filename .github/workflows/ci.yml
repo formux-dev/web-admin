@@ -1,0 +1,27 @@
+name: CI
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build_run:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Run yarn install
+        run: yarn install
+
+      - name: Build Next.js React app
+        uses: borales/actions-yarn@v2.0.0
+        with:
+          cmd: build
+
+      - name: Deploy to Firebase Hosting
+        uses: w9jds/firebase-action@v1.5.0
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

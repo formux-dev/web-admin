@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "formux-8d67b"
+  },
+  "targets": {
+    "formux-8d67b": {
+      "hosting": {
+        "formux-admin": [
+          "formux-admin"
+        ]
+      }
+    }
+  }
+}
