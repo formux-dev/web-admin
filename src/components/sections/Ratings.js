@@ -22,14 +22,13 @@ export default function Ratings({ responsesQuery }) {
       {!responsesQuery.data.length ? (
         <p>No data</p>
       ) : (
-        <XYPlot height={300} width={Math.max(sizes.width ?? 300, 700)}>
+        <XYPlot height={300} width={Math.max(sizes.width ?? 300, 700)} yDomain={[1, 5]}>
           <LineSeries
             color="grey"
-            // barWidth={0.1}
             data={responsesQuery.data
               .sort((a, b) => a.info.timestamp - b.info.timestamp)
               .map((response, index) => {
-                return { x: index, y: response.info.rating };
+                return { x: index + 1, y: response.info.rating };
               })}
           />
           <LineSeries
@@ -38,7 +37,7 @@ export default function Ratings({ responsesQuery }) {
             data={responsesQuery.data
               .sort((a, b) => a.info.timestamp - b.info.timestamp)
               .map((response, index) => {
-                return { x: index, y: response.info.rating };
+                return { x: index + 1, y: response.info.rating };
               })}
           />
 
