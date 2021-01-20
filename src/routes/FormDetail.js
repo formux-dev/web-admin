@@ -14,9 +14,7 @@ export default function FormInfo() {
 
   const formQuery = useQuery(["form", formId], getForm);
   const responsesQuery = useQuery(["responses", formId], getResponses);
-  const biasesQuery = useQuery(["biases", formId], getBiases, {
-    onSuccess: data => console.log(data),
-  });
+  const biasesQuery = useQuery(["biases", formId], getBiases);
 
   if (formQuery.isLoading || responsesQuery.isLoading || biasesQuery.isLoading) {
     return <p>Loading...</p>;
