@@ -33,7 +33,7 @@ export default function Biases({ biasesQuery }) {
                   return (
                     <li style={{ background: getBiasColor(option.rating) }}>
                       <strong>{option.value.toString()}</strong>
-                      <p>{option.rating.toFixed(2)}</p>
+                      <p>{option.rating}</p>
                     </li>
                   );
                 })}
