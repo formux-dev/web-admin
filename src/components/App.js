@@ -1,11 +1,11 @@
 import { ReactQueryDevtools } from "react-query-devtools";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import GlobalStyle from "./globalStyles";
+import GlobalStyle from "../globalStyles";
 
 import Wrapper from "./Wrapper";
-import List from "./routes/List";
-import FormInfo from "./routes/FormInfo";
+import List from "../routes/List";
+import FormInfo from "../routes/FormDetail";
 
 export default function App() {
   return (

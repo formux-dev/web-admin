@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 
 import { getForms } from "../queries/client";
-import ListItem from "../ListItem";
+import ListItem from "../components/ListItem";
 
 export default function List() {
   const { isLoading, error, data } = useQuery("forms", getForms, {
@@ -19,8 +19,8 @@ export default function List() {
 
   return (
     <ul>
-      {data.forms.map(({ id, title }) => {
-        return <ListItem id={id} title={title} />;
+      {data.map(({ formId, title }) => {
+        return <ListItem formId={formId} title={title} />;
       })}
     </ul>
   );

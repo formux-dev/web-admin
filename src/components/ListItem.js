@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-export default function ListItem({ id, title }) {
+export default function ListItem({ formId, title }) {
   return (
     <StyledListItem>
-      <Link to={"/" + id}>
-        <h2>{title}</h2>
+      <Link to={"/" + formId}>
+        <h2>{title ?? `Untitled (${formId})`}</h2>
         <img src="/arrow-right.svg" alt="right arrow" />
       </Link>
     </StyledListItem>
