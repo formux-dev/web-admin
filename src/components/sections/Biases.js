@@ -4,7 +4,7 @@ import Section from "../Section";
 
 export default function Biases({ biasesQuery }) {
   const getBiasColor = bias => {
-    bias *= 20;
+    bias *= 4;
 
     var r,
       g,
