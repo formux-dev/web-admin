@@ -1,4 +1,4 @@
-import { getFormsUrl, getFormUrl, getResponsesUrl } from "./config";
+import { getFormsUrl, getFormUrl, getResponsesUrl, getBiasesUrl } from "./config";
 
 async function getForms() {
   return await (await fetch(getFormsUrl)).json();
@@ -12,4 +12,8 @@ async function getResponses(_, formId) {
   return await (await fetch(getResponsesUrl(formId))).json();
 }
 
-export { getForms, getForm, getResponses };
+async function getBiases(_, formId) {
+  return await (await fetch(getBiasesUrl(formId))).json();
+}
+
+export { getForms, getForm, getResponses, getBiases };

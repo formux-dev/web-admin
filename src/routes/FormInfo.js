@@ -13,25 +13,48 @@ import {
 import useResizeAware from "react-resize-aware";
 import { curveBundle } from "d3-shape";
 
-import { getResponses, getForm } from "../queries/client";
+import { getResponses, getForm, getBiases } from "../queries/client";
+import { Fragment } from "react";
 
 export default function FormInfo() {
   let { formId } = useParams();
 
-  const responsesQuery = useQuery(["responses", formId], getResponses);
   const formQuery = useQuery(["form", formId], getForm);
+  const responsesQuery = useQuery(["responses", formId], getResponses);
+  const biasesQuery = useQuery(["biases", formId], getBiases, {
+    onSuccess: data => console.log(data),
+  });
 
   const [resizeListener, sizes] = useResizeAware();
 
-  if (responsesQuery.isLoading || formQuery.isLoading) {
+  const getBiasColor = bias => {
+    bias *= 20;
+
+    var r,
+      g,
+      b = 0;
+    if (bias < 50) {
+      r = 255;
+      g = Math.round(5.1 * bias);
+    } else {
+      g = 255;
+      r = Math.round(510 - 5.1 * bias);
+    }
+    var h = r * 0x10000 + g * 0x100 + b * 0x1;
+    return "#" + ("000000" + h.toString(16)).slice(-6);
+  };
+
+  if (formQuery.isLoading || responsesQuery.isLoading || biasesQuery.isLoading) {
     return <p>Loading...</p>;
   }
 
-  if (responsesQuery.error || formQuery.error) {
+  if (formQuery.error || responsesQuery.error || biasesQuery.error) {
     return (
-      <p>
-        Error: {responsesQuery.error.message} {formQuery.error.message}
-      </p>
+      <Fragment>
+        {formQuery.error && <p>Error: {formQuery.error.message}</p>}
+        {responsesQuery.error && <p>Error: {responsesQuery.error.message}</p>}
+        {biasesQuery.error && <p>Error: {biasesQuery.error.message}</p>}
+      </Fragment>
     );
   }
 
@@ -46,6 +69,25 @@ export default function FormInfo() {
 
       <Section>
         <h2>Bias</h2>
+        <FeatureList>
+          {biasesQuery.data.map(feature => {
+            return (
+              <li>
+                <h3>{feature.name}</h3>
+                <OptionsList>
+                  {feature.options.map(option => {
+                    return (
+                      <li style={{ background: getBiasColor(option.rating) }}>
+                        <strong>{option.value.toString()}</strong>
+                        <p>{option.rating.toFixed(2)}</p>
+                      </li>
+                    );
+                  })}
+                </OptionsList>
+              </li>
+            );
+          })}
+        </FeatureList>
       </Section>
 
       <Section>
@@ -132,18 +174,51 @@ export default function FormInfo() {
 const Table = styled.table`
   text-align: left;
   border-collapse: collapse;
+  width: 100%;
 
   & td,
   th {
     padding: 4px;
     border: 1px solid grey;
-    min-width: 130px;
+    min-width: 150px;
   }
 `;
 
 const StarContainer = styled.div`
   display: flex;
   flex-direction: row;
+`;
+
+const FeatureList = styled.ul`
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  & li {
+    border-radius: 16px;
+    padding: 8px 16px;
+    background: #ededed;
+    gap: 16px;
+
+    & h3 {
+      margin-bottom: 8px;
+    }
+  }
+`;
+
+const OptionsList = styled.ul`
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  gap: 8px;
+
+  & li {
+    padding: 4px 8px;
+    text-align: center;
+    border-radius: 4px;
+  }
 `;
 
 const BackButton = styled(Link)`
@@ -160,6 +235,9 @@ const BackButton = styled(Link)`
 const Section = styled.section`
   position: relative;
   margin: 64px 0;
+  overflow-x: auto;
 
-  overflow-x: scroll;
+  & > h2 {
+    margin-bottom: 8px;
+  }
 `;
