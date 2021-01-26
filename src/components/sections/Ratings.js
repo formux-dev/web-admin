@@ -9,6 +9,7 @@ import {
 } from "react-vis";
 import useResizeAware from "react-resize-aware";
 import { curveBundle } from "d3-shape";
+import regression from "regression";
 
 import Section from "../Section";
 
@@ -17,27 +18,38 @@ export default function Ratings({ responsesQuery }) {
 
   return (
     <Section>
+      <h2>Biases</h2>
       {resizeListener}
-      <h2>Ratings trend</h2>
       {!responsesQuery.data.length ? (
         <p>No data</p>
       ) : (
         <XYPlot height={300} width={Math.max(sizes.width ?? 300, 700)} yDomain={[1, 5]}>
           <LineSeries
-            color="grey"
+            curve={curveBundle.beta(1)}
+            color="black"
             data={responsesQuery.data
               .sort((a, b) => a.info.timestamp - b.info.timestamp)
               .map((response, index) => {
                 return { x: index + 1, y: response.info.rating };
               })}
           />
+
           <LineSeries
-            curve={curveBundle.beta(0.2)}
-            color="red"
-            data={responsesQuery.data
-              .sort((a, b) => a.info.timestamp - b.info.timestamp)
-              .map((response, index) => {
-                return { x: index + 1, y: response.info.rating };
+            color="orange"
+            data={regression
+              .polynomial(
+                responsesQuery.data
+                  .sort((a, b) => a.info.timestamp - b.info.timestamp)
+                  .map((response, index) => {
+                    return [index + 1, response.info.rating];
+                  }),
+                {
+                  order: responsesQuery.data.length / 3,
+                  precision: 300,
+                }
+              )
+              .points.map(([x, y]) => {
+                return { x, y };
               })}
           />
 
