@@ -17,8 +17,7 @@ export default function Ratings({ responsesQuery }) {
   const [resizeListener, sizes] = useResizeAware();
 
   return (
-    <Section>
-      <h2>Biases</h2>
+    <Section title="Ratings">
       {resizeListener}
       {!responsesQuery.data.length ? (
         <p>No data</p>

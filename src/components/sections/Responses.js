@@ -4,8 +4,7 @@ import Section from "../Section";
 
 export default function Responses({ formQuery, responsesQuery }) {
   return (
-    <Section>
-      <h2>Responses</h2>
+    <Section title="Responses">
       {!responsesQuery.data.length ? (
         <p>No data</p>
       ) : (

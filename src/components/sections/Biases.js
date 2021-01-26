@@ -21,8 +21,7 @@ export default function Biases({ biasesQuery }) {
   };
 
   return (
-    <Section>
-      <h2>Biases</h2>
+    <Section title="Biases">
       <FeatureList>
         {biasesQuery.data.map(feature => {
           return (
