@@ -1,6 +1,7 @@
 import "../../../node_modules/react-vis/dist/style.css";
 import {
   XYPlot,
+  LineMarkSeries,
   LineSeries,
   VerticalGridLines,
   HorizontalGridLines,
@@ -8,7 +9,6 @@ import {
   YAxis,
 } from "react-vis";
 import useResizeAware from "react-resize-aware";
-import { curveBundle } from "d3-shape";
 import regression from "regression";
 
 import Section from "../Section";
@@ -23,8 +23,7 @@ export default function Ratings({ responsesQuery }) {
         <p>No data</p>
       ) : (
         <XYPlot height={300} width={Math.max(sizes.width ?? 300, 700)} yDomain={[1, 5]}>
-          <LineSeries
-            curve={curveBundle.beta(1)}
+          <LineMarkSeries
             color="black"
             data={responsesQuery.data
               .sort((a, b) => a.info.timestamp - b.info.timestamp)
@@ -43,8 +42,8 @@ export default function Ratings({ responsesQuery }) {
                     return [index + 1, response.info.rating];
                   }),
                 {
-                  order: responsesQuery.data.length / 3,
-                  precision: 300,
+                  order: 45,
+                  precision: 302,
                 }
               )
               .points.map(([x, y]) => {
@@ -52,7 +51,6 @@ export default function Ratings({ responsesQuery }) {
               })}
           />
 
-          <VerticalGridLines />
           <VerticalGridLines />
           <HorizontalGridLines />
           <XAxis />
